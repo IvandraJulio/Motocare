@@ -17,7 +17,7 @@ if ('serviceWorker' in navigator) {
             .catch(err => console.warn('PWA SW gagal:', err));
         if ('caches' in window) {
             caches.keys().then(keys => {
-                keys.filter(k => k !== 'motocare-v10' && k !== 'motocare-data')
+                keys.filter(k => k !== 'motocare-v11' && k !== 'motocare-data')
                     .forEach(k => caches.delete(k));
             });
         }
@@ -30,7 +30,7 @@ const API_BASE = (window.location.hostname === 'localhost' || window.location.ho
     : '';
 
 const appContent = document.getElementById('app-content');
-if (appContent) appContent.style.paddingTop = '28px';
+if (appContent) appContent.style.paddingTop = '44px';
 
 // Helper: selalu dapatkan modal container yang valid (buat jika belum ada)
 function getModalContainer() {
