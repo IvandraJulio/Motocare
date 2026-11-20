@@ -27,6 +27,9 @@ if (process.env.DATABASE_URL) {
 
 // Melayani file statis Frontend PWA
 app.use(express.static(path.join(__dirname, '../frontend')));
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/index.html'));
+});
 
 const motorSaya = {
   nama: "Honda ADV 160",
