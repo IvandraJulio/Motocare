@@ -1044,7 +1044,7 @@ async function renderProfil() {
         <!-- Avatar & Role Section -->
         <div class="flex flex-col items-center my-4">
             <div class="w-24 h-24 rounded-full p-[2px] bg-gradient-to-b from-[#DEC99F]/60 via-[#DEC99F]/20 to-transparent shadow-lg mb-2">
-                <img src="${profil.avatar_url || 'images/profile.jpg'}" alt="${profil.nama}" class="w-full h-full rounded-full object-cover" onerror="this.src='images/profile.jpg'">
+                <img src="${(profil.avatar_url || 'images/profile.jpg')}?v=8.0" alt="${profil.nama}" class="w-full h-full rounded-full object-cover" onerror="this.src='images/profile.jpg?v=8.0'">
             </div>
             <p class="text-xs font-medium text-[#DEC99F]">${profil.peran || 'Pengembang aplikasi'}</p>
         </div>
