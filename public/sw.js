@@ -1,4 +1,4 @@
-const CACHE_NAME = 'motocare-v8';
+const CACHE_NAME = 'motocare-v10';
 const ASSETS = [
   './',
   './index.html',
@@ -28,27 +28,23 @@ self.addEventListener('activate', (evt) => {
         keys.filter((key) => key !== CACHE_NAME && key !== 'motocare-data')
             .map((key) => caches.delete(key))
       );
-    })
+    }).then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
+// Network-First strategy agar update HTML/JS/Gambar langsung tampil, fallback ke cache saat offline
 self.addEventListener('fetch', (evt) => {
-  // Handle API requests with Network First, falling back to cache
-  if (evt.request.url.includes('/api/')) {
-    evt.respondWith(
-      fetch(evt.request)
-        .then((res) => {
+  if (evt.request.method !== 'GET') return;
+  evt.respondWith(
+    fetch(evt.request)
+      .then((res) => {
+        if (res && res.status === 200) {
           const resClone = res.clone();
-          caches.open('motocare-data').then((cache) => cache.put(evt.request, resClone));
-          return res;
-        })
-        .catch(() => caches.match(evt.request))
-    );
-  } else {
-    // Handle static assets with Cache First, falling back to network
-    evt.respondWith(
-      caches.match(evt.request).then((cacheRes) => cacheRes || fetch(evt.request))
-    );
-  }
+          const targetCache = evt.request.url.includes('/api/') ? 'motocare-data' : CACHE_NAME;
+          caches.open(targetCache).then((cache) => cache.put(evt.request, resClone));
+        }
+        return res;
+      })
+      .catch(() => caches.match(evt.request))
+  );
 });

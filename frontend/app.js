@@ -3,12 +3,24 @@
  * Target UI: 100% Match with Figma SVG Designs + Fully Working Filter System
  */
 
-// Register Service Worker for PWA
+// Hapus status bar simulasi (9:41) jika browser masih memuat index.html dari cache lama SW
+document.querySelectorAll('header').forEach(el => el.remove());
+
+// Register Service Worker for PWA & bersihkan cache HTML lama
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')
-            .then(reg => console.log('MotoCare PWA SW terdaftar:', reg.scope))
+            .then(reg => {
+                reg.update();
+                console.log('MotoCare PWA SW terdaftar:', reg.scope);
+            })
             .catch(err => console.warn('PWA SW gagal:', err));
+        if ('caches' in window) {
+            caches.keys().then(keys => {
+                keys.filter(k => k !== 'motocare-v10' && k !== 'motocare-data')
+                    .forEach(k => caches.delete(k));
+            });
+        }
     });
 }
 
@@ -18,6 +30,7 @@ const API_BASE = (window.location.hostname === 'localhost' || window.location.ho
     : '';
 
 const appContent = document.getElementById('app-content');
+if (appContent) appContent.style.paddingTop = '28px';
 
 // Helper: selalu dapatkan modal container yang valid (buat jika belum ada)
 function getModalContainer() {
