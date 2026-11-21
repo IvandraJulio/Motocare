@@ -124,13 +124,21 @@
             opacity: 1;
         }
 
-        /* Scrollbar hide */
+        /* Hide native scrollbars while keeping smooth drag & wheel scroll */
         ::-webkit-scrollbar {
             display: none;
         }
-        body, main {
+        body, main, .h-scroll {
             -ms-overflow-style: none;
             scrollbar-width: none;
+        }
+        .h-scroll {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            cursor: grab;
+        }
+        .h-scroll:active {
+            cursor: grabbing;
         }
     </style>
 </head>
@@ -153,35 +161,55 @@
             </div>
         </main>
 
-        <!-- Floating Bottom Navigation Bar (Width 350px, Height 76px, rx 24px) -->
-        <nav id="bottom-nav" class="fixed bottom-4 left-0 right-0 w-full max-w-[390px] mx-auto px-5 z-40 pointer-events-none">
-            <div class="pointer-events-auto bg-[#151D22]/85 backdrop-blur-xl border border-[#E4ECE7]/15 rounded-[24px] h-[72px] px-2 flex items-center justify-around shadow-2xl">
-                <!-- Tab Riwayat -->
+        <!-- Floating Bottom Navigation Bar (5 Halaman Utama) -->
+        <nav id="bottom-nav" class="fixed bottom-4 left-0 right-0 w-full max-w-[390px] mx-auto px-4 z-40 pointer-events-none">
+            <div class="pointer-events-auto bg-[#151D22]/90 backdrop-blur-xl border border-[#E4ECE7]/15 rounded-[24px] h-[72px] px-1.5 flex items-center justify-between shadow-2xl">
+                <!-- 1. Tab Riwayat -->
                 <a href="#/riwayat" id="nav-riwayat" class="nav-btn transition-all duration-200 flex flex-col items-center justify-center text-xs h-[52px]">
-                    <svg class="w-5 h-5 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <svg class="w-4 h-4 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
                     </svg>
-                    <span class="text-[11px] font-medium leading-none">Riwayat</span>
+                    <span class="text-[10px] font-medium leading-none">Riwayat</span>
                 </a>
 
-                <!-- Tab Katalog -->
+                <!-- 2. Tab Garasi (Multi-Motor) -->
+                <a href="#/garasi" id="nav-garasi" class="nav-btn transition-all duration-200 flex flex-col items-center justify-center text-xs h-[52px]">
+                    <svg class="w-4 h-4 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="5.5" cy="17.5" r="3.5"/>
+                        <circle cx="18.5" cy="17.5" r="3.5"/>
+                        <path d="M15 6h3l2 5h-5l-3-5H8l-2.5 6.5"/>
+                        <path d="M9 17.5h6"/>
+                    </svg>
+                    <span class="text-[10px] font-medium leading-none">Garasi</span>
+                </a>
+
+                <!-- 3. Tab Katalog -->
                 <a href="#/katalog" id="nav-katalog" class="nav-btn transition-all duration-200 flex flex-col items-center justify-center text-xs h-[52px]">
-                    <svg class="w-5 h-5 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <svg class="w-4 h-4 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="3" y="3" width="7" height="7" rx="1.5"/>
                         <rect x="14" y="3" width="7" height="7" rx="1.5"/>
                         <rect x="3" y="14" width="7" height="7" rx="1.5"/>
                         <rect x="14" y="14" width="7" height="7" rx="1.5"/>
                     </svg>
-                    <span class="text-[11px] font-medium leading-none">Katalog</span>
+                    <span class="text-[10px] font-medium leading-none">Katalog</span>
                 </a>
 
-                <!-- Tab Profil -->
+                <!-- 4. Tab Bengkel -->
+                <a href="#/bengkel" id="nav-bengkel" class="nav-btn transition-all duration-200 flex flex-col items-center justify-center text-xs h-[52px]">
+                    <svg class="w-4 h-4 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    <span class="text-[10px] font-medium leading-none">Bengkel</span>
+                </a>
+
+                <!-- 5. Tab Profil -->
                 <a href="#/profil" id="nav-profil" class="nav-btn transition-all duration-200 flex flex-col items-center justify-center text-xs h-[52px]">
-                    <svg class="w-5 h-5 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <svg class="w-4 h-4 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                         <circle cx="12" cy="7" r="4"/>
                     </svg>
-                    <span class="text-[11px] font-medium leading-none">Profil</span>
+                    <span class="text-[10px] font-medium leading-none">Profil</span>
                 </a>
             </div>
         </nav>
@@ -192,6 +220,6 @@
     </div>
 
     <!-- Script SPA MotoCare -->
-    <script src="app.js?v=11.0"></script>
+    <script src="app.js?v=15.0"></script>
 </body>
 </html>

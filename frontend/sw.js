@@ -1,4 +1,4 @@
-const CACHE_NAME = 'motocare-v11';
+const CACHE_NAME = 'motocare-v15';
 const ASSETS = [
   './',
   './index.html',
