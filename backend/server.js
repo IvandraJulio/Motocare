@@ -428,11 +428,25 @@ function enrichMotor(motor) {
 }
 
 async function ensureMotorHasInitialServis(motor) {
-  const existing = backendCache.riwayat.filter(r => parseInt(r.motor_id || 1) === parseInt(motor.id));
-  if (existing.length > 0) return;
+  // Normalisasi nama jenis servis lama pada motor_id=2 bila ada
+  for (const r of backendCache.riwayat) {
+    if (parseInt(r.motor_id || 1) === parseInt(motor.id)) {
+      if (r.jenis_servis === 'Ganti Oli & Gear Oil') {
+        r.jenis_servis = 'Ganti Oli Mesin';
+        if (sql) await sql`UPDATE riwayat_servis SET jenis_servis = 'Ganti Oli Mesin' WHERE id = ${r.id}`.catch(() => {});
+      } else if (r.jenis_servis === 'Servis CVT & Filter Udara') {
+        r.jenis_servis = 'Servis CVT';
+        if (sql) await sql`UPDATE riwayat_servis SET jenis_servis = 'Servis CVT' WHERE id = ${r.id}`.catch(() => {});
+      }
+    }
+  }
 
+  const existing = backendCache.riwayat.filter(r => parseInt(r.motor_id || 1) === parseInt(motor.id));
+  const existingTypes = new Set(existing.map(r => String(r.jenis_servis || '').toLowerCase().trim()));
   const templates = buildInitialServisForMotor(motor.id, motor.odometer, motor.tahun);
+
   for (const t of templates) {
+    if (existingTypes.has(t.jenis_servis.toLowerCase())) continue;
     let created = {
       id: backendCache.riwayat.reduce((max, r) => Math.max(max, r.id), 0) + 1,
       ...t
